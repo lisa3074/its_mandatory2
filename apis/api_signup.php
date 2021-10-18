@@ -6,13 +6,16 @@ if(!isset($_SESSION)){
   session_start();
 }
 
- if( ! isset($_POST['user_email']) ){
-  header('Location: /signup/Put in an email');
+ if( !$_POST['firstname'] ){
+  header('Location: /signup/Fill out your first name');
   exit();  
 }
-
-if( ! isset($_POST['password']) ){
-  header('Location: /signup/Put in a password');
+ if( !$_POST['lastname'] ){
+  header('Location: /signup/Fill out your last name');
+  exit();  
+}
+ if( !$_POST['user_email'] ){
+  header('Location: /signup/Put in an email');
   exit();  
 }
 
@@ -20,6 +23,11 @@ if( ! filter_var($_POST['user_email'], FILTER_VALIDATE_EMAIL) ){
   header('Location: /signup/The email you entered was not an email (example: a@a.com)');
   exit();  
 }
+if( !$_POST['password'] ){
+  header('Location: /signup/Put in a password');
+  exit();  
+}
+
 
 //Check if email has been used
 $q1 = $db->prepare('SELECT * FROM user WHERE email = :email');
@@ -48,7 +56,9 @@ if( $password_length < 6 or $password_length > 50 ){
     $salt = hash("sha256",base64_encode(openssl_random_pseudo_bytes(10)));
     $currentTime = time(); //timestamp
 try{
-  $q = $db->prepare("INSERT INTO user (email, password, salt, uuid, logger, logged_time) values (:email, :password, :salt, :uuid, 0, $currentTime)");
+  $q = $db->prepare("INSERT INTO user (firstname, lastname, email, password, salt, uuid, logger, logged_time) values (:firstname, :lastname, :email, :password, :salt, :uuid, 0, $currentTime)");
+  $q->bindValue(':firstname', $_POST['firstname']);
+  $q->bindValue(':lastname', $_POST['lastname']);
   $q->bindValue(':email', strtolower($_POST['user_email']));
   $q->bindValue(':password', hash("sha256", $_POST['password']));
   $q->bindValue(':salt',hash("sha256", $salt));

@@ -1,8 +1,6 @@
 <?php
 require_once(__DIR__.'/../db.php');
 
-
-
 if(!isset($_SESSION)){
   session_start();
 }
@@ -47,11 +45,8 @@ $timeStamp = $user['logged_time']; //timestamp
 $currentTime = time(); //timestamp
 $seconds = $currentTime - $timeStamp;
 $logged = $user['logger'] + 1;
-//$newTime = date('Y-m-d H:i:s', time()); //datetime
 
  //If password doesn't match
-// if($_POST['password'] != $user['password']){ //no hashing, BAD
-
     //Take the input password and hash it, add the salt from the database (created onsignup) and the peber from this code base (static variable)
     //cross check it with the password from the db (already hashed), the hashed salt from the db and the peber from this code base
     if( hash("sha256", $_POST['password']).$user['salt'].$peber != $user['password'].$user['salt'].$peber){
@@ -84,6 +79,7 @@ $logged = $user['logger'] + 1;
     exit();
   } 
   $_SESSION['email'] = $_POST['user_email'];
+  $_SESSION['firstname'] = $user['firstname'];
   $_SESSION['uuid'] = $user['uuid'];
   $set_new_logger = 0;
   require_once(__DIR__.'/postToDb.php');        
@@ -91,36 +87,3 @@ $logged = $user['logger'] + 1;
   exit();
 }; 
   
-  
-
-/* if(bruger IKKE findes){
-   exit();
-}
-
-If (password ikke matcher bruger){
-  If (loggen >= 3 ){
-   If (timestamp > 5 min){
-      //Sæt logger til 1 og gem nyt timestamp
-    }else{
-      //Din konto er på pause i 5 min
-      //Evt gem timestamp 
-    }
-  }else{
-    //Sæt logger til nuværende log + 1
-  }
-} else {
-  //konto og password matcher)
-  if(logger >= 3 && timestamp < 5 sek){
-    //Din konto er på pause i 5 min
-    //Evt gem timestamp 
-    exit();
-  }
-// Sæt logger til 0
-// Gen timestamp
-// Log ind
-}
-
-
-
-
- */

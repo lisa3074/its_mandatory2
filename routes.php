@@ -21,6 +21,10 @@ get('/signup', function(){
    require_once(__DIR__ . '/views/signup.php');
 
 });
+get('/test_comments', function(){
+   require_once(__DIR__ . '/apis/api_display_comments.php');
+
+});
 
 
 get('/login/:display_error', function($display_error){
@@ -34,11 +38,13 @@ get('/signup/:display_error', function($display_error){
 get('/admin', function(){
    require_once(__DIR__ . '/views/admin.php');
 
+
 });
 get('/admin/note/:note', function($note){
    require_once(__DIR__ . '/views/admin.php');
 
 });
+
 get('/admin/:display_message', function($display_message){
    require_once(__DIR__ . '/views/admin.php');
 
@@ -64,6 +70,18 @@ post('/signup', function(){
 post('/admin', function(){
    //echo 'Hello';
   require_once(__DIR__ . '/apis/api_save_note.php');
+  require_once(__DIR__ . '/views/admin.php');
+
+});
+post('/admin/comment', function(){
+   //echo 'Hello';
+  require_once(__DIR__ . '/apis/api_save_comment.php');
+  require_once(__DIR__ . '/views/admin.php');
+
+});
+post('/admin/delete/:comment_id/:user_id', function($comment_id, $user_id){
+   //echo 'Hello';
+  require_once(__DIR__ . '/apis/api_delete_comment.php');
   require_once(__DIR__ . '/views/admin.php');
 
 });
